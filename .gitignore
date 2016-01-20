@@ -1,0 +1,21 @@
+# Created by .ignore support plugin (hsz.mobi)
+/bin/
+# Intellij
+.idea/
+*.iml
+*.iws
+
+# Eclipse
+.classpath
+.project
+.settings/
+bin/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+*.MF
+
+*.class
