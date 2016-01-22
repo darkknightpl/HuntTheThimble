@@ -19,7 +19,7 @@ public class Model
 
     public Model()
     {
-        linearEquationsMethod = new LinearEquationsMethod();
+        //linearEquationsMethod = new LinearEquationsMethod();
         //picksTheorem = new PicksTheorem();
     }
 
@@ -30,7 +30,7 @@ public class Model
 
     public void solvePicksMethod()
     {
-        picksTheorem = new PicksTheorem(testCase);
+        picksTheorem = new PicksTheorem();
         picksTheorem.solve(testCase);
     }
 

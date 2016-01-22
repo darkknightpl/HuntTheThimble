@@ -2,6 +2,7 @@ package com.aal.huntthethimble.model;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Created by Marcin on 2016-01-03.
@@ -12,31 +13,21 @@ public class PicksTheorem
     private ArrayList<Hint> hints;          //|
     private double[] area;                  //v (y)
 
-    public PicksTheorem(TestCase testCase)
+    public PicksTheorem()
     {
         area = new double[50];
-        hints = testCase.getHintsList(); //straight reference to list, to save time
-        room = new boolean[testCase.getRoomSize()+1][testCase.getRoomSize()+1]; //plus one, because object can be hidden in corners (ex. (10,10) or (0,0))
-        for(int i = 0; i<testCase.getRoomSize()+1; i++)
-            for (int j = 0; j < testCase.getRoomSize() + 1; j++)
-                room[i][j] = true;
-    }
-
-    public void init(TestCase testCase)
-    {
-        area = new double[50];
-        hints = testCase.getHintsList(); //straight reference to list, to save time
-        room = new boolean[testCase.getRoomSize()+1][testCase.getRoomSize()+1];
-        for(int i = 0; i<testCase.getRoomSize()+1; i++)
-            for (int j = 0; j < testCase.getRoomSize() + 1; j++)
-                room[i][j] = true;
-
     }
 
     public void solve(TestCase testCase)
     {
         int roomSize = testCase.getRoomSize();
         double currentArea = roomSize*roomSize;
+
+        hints = testCase.getHintsList(); //straight reference to list, to save time
+        room = new boolean[roomSize+1][roomSize+1]; //plus one, because object can be hidden in corners (ex. (10,10) or (0,0))
+        for(int i = 0; i<roomSize+1; i++)
+            for (int j = 0; j < roomSize + 1; j++)
+                room[i][j] = true;
 
         Point2D.Double prevPosition;
         Point2D.Double currPosition  = new Point2D.Double(0,0);
@@ -60,12 +51,12 @@ public class PicksTheorem
                 {
                     prevDistance = distance(x,y,prevPosition.getX(), prevPosition.getY());
                     currDistance = distance(x,y,currPosition.getX(), currPosition.getY());
-                    if(currentHint.getTip() == "HOTTER")
+                    if(Objects.equals(currentHint.getTip(), "HOTTER"))
                     {
                         if(currDistance>prevDistance)
                             room[x][y] = false;
                     }
-                    else if (currentHint.getTip() == "COLDER")
+                    else if (currentHint.getTip().equals("COLDER"))
                     {
                         if(currDistance<prevDistance)
                             room[x][y] = false;
@@ -88,7 +79,7 @@ public class PicksTheorem
             {
                 for (int y = 0; y < roomSize + 1; y++)
                 {
-                    if (room[x][y] == true)
+                    if (room[x][y]) //== true
                     {
                         if (x == 0 || y == 0 || x == roomSize || y == roomSize)
                             pointsBorder++;
@@ -120,31 +111,6 @@ public class PicksTheorem
         double deltaX = Math.abs(x1 - x2);
         double deltaY = Math.abs(y1 - y2);
         return Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
-
-    }
-
-    public void solveTest(TestCase testCase)
-    {
-        int roomSize = testCase.getRoomSize();
-        int currentArea = roomSize*roomSize;
-
-        Point2D.Double previousPosition;
-        Point2D.Double currentPosition  = new Point2D.Double(0,0);
-
-        Hint currentHint;
-
-        int index = 0;
-        for(Hint h : hints)
-        {
-            currentHint = h;
-            index++;
-
-            previousPosition = currentPosition;
-            currentPosition = currentHint.getCoordinates();
-
-            System.out.println(index + "-> prev: " + previousPosition + ", curr: " + currentPosition);
-        }
-
     }
 
     public static void main(String[] args)
@@ -156,7 +122,7 @@ public class PicksTheorem
         test.addHint(new Hint(new Point2D.Double(4,4), "THESAME"));
         //test.addHint(new Hint(new Point2D.Double(3,3), "hot"));
 
-        PicksTheorem picks = new PicksTheorem(test);
+        PicksTheorem picks = new PicksTheorem();
         picks.solve(test);
 
     }
